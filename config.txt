@@ -1,0 +1,7 @@
+[smtp]
+server = smtp.example.nourl
+port = 587
+from = from@email.nourl
+to = to@email.nourl
+login = login@email.nourl
+password = email-passw0rd

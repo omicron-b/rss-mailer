@@ -70,8 +70,6 @@ Published: {}\n
 def check_updates(feeds_dict):
     """Checks for updates and calls relevant functions."""
     count = 0  # Used for saving state files
-    updates_detected = False
-    first_run = False
 
     def state_update(file):
         """Updates state file."""
@@ -83,6 +81,8 @@ def check_updates(feeds_dict):
             raise e
 
     for key in feeds_dict:
+        updates_detected = False
+        first_run = False
         state_file = ''.join((str(Path(__file__).parent), '/state/feed{}.state'.format(count)))
         # Detecting first run for each feed
         if Path(state_file).is_file() == False:

@@ -25,7 +25,7 @@ def get_urls(file):
     return urls
 
 def get_rss_data(urls_list):
-    """Gets RSS data and return only relevant fields."""
+    """Gets RSS data and returns only relevant fields."""
     feeds_in = {}
     feeds_out = {}
     try:

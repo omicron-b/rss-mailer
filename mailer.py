@@ -11,6 +11,7 @@ from email.message import EmailMessage
 from pathlib import Path
 from configparser import ConfigParser
 
+# Join needs tuples
 config_file = ''.join((str(Path(__file__).parent), '/config.txt'))
 url_file = ''.join((str(Path(__file__).parent), '/feeds.txt'))
 config = ConfigParser()
@@ -85,7 +86,7 @@ def check_updates(feeds_dict):
         first_run = False
         state_file = ''.join((str(Path(__file__).parent), '/state/feed{}.state'.format(count)))
         # Detecting first run for each feed
-        if Path(state_file).is_file() == False:
+        if not Path(state_file).is_file():
             state_update(state_file)
             first_run = True
         # Main loop
@@ -95,7 +96,7 @@ def check_updates(feeds_dict):
                     # Detecting updates for each feed
                     if line != feeds_dict[key]['published']:
                         updates_detected = True
-            if updates_detected and first_run != True:
+            if updates_detected and not first_run:
                 # Calling state_update and send_mail as normal operation
                 state_update(state_file)
                 send_mail(feeds_dict[key]['title'], feeds_dict[key]['published'], feeds_dict[key]['post'], feeds_dict[key]['link'])

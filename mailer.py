@@ -10,6 +10,7 @@ import smtplib
 from email.message import EmailMessage
 from pathlib import Path
 from configparser import ConfigParser
+from datetime import datetime
 
 # Join needs tuples
 config_file = ''.join((str(Path(__file__).parent), '/config.txt'))
@@ -26,13 +27,20 @@ def get_urls(file):
     return urls
 
 def get_rss_data(urls_list):
-    """Gets RSS data and returns only relevant fields."""
+    """Gets RSS data and return only relevant fields."""
     feeds_in = {}
     feeds_out = {}
     try:
         for line in urls_list:
             feeds_in[line] = fparse(line)
-            feeds_out[line] = {'published': feeds_in[line].entries[0].published}
+            # Convert datetime to UTC
+            try:
+                dttm_pub = datetime.strptime(feeds_in[line].entries[0].published, "%a, %d %b %Y %H:%M:%S %z")
+                dttm_pub_str = dttm_pub.astimezone().strftime("%a, %d %b %Y %H:%M:%S %z")
+                feeds_out[line] = {'published': dttm_pub_str}
+            # Keep it as is if the feed doest not adhere to RSS standards
+            except:
+                feeds_out[line] = {'published': feeds_in[line].entries[0].published}
             feeds_out[line]['title'] = feeds_in[line].feed.title
             feeds_out[line]['post'] = feeds_in[line].entries[0].title
             feeds_out[line]['link'] = feeds_in[line].entries[0].link
